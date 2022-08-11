@@ -14,22 +14,23 @@ tQ = tE(296939092187233862778999244256460019221379646447,
 # it is useful if E's order is p.
 def lift_up(point, tE, p):
     # y^2=x^3+a4*x+a6 in Z/pZ
-    E = tE.change_ring(Zp(p, 2))
+    E = tE.change_ring(Qp(p, 2))
     a4 = tE.a4()
     a6 = tE.a6()
     # \alpha(s,t)
     s, t = point.xy()
 
-    # Zp
-    zp = Zp(p, 3)
+    # qp
+    qp = Qp(p, 2)
     # randomly choose a X1 mod p = s and it can be s it self
-    X1 = zp(s)
+    X1 = qp(s)+p
     ###########generate Y1##########
-    y = zp(t)
+    y = qp(t)
     omega = (((ZZ(X1) ^ 3+ZZ(a4)*ZZ(X1)+ZZ(a6)-ZZ(y) ^ 2)/p) % p)/(2*ZZ(t))
     # if aseert work then pls change X1.
+    print(omega)
     assert omega != 0
-    Y1 = y+p*zp(omega)
+    Y1 = y+p*qp(omega)
     ################################
     # X1, Y1 is a  point in E(Z/p^2Z)
     A = E(X1, Y1)
