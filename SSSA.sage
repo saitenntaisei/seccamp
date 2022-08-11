@@ -28,7 +28,7 @@ def lift_up(point, tE, p):
     omega = (((ZZ(X1) ^ 3+a4*ZZ(X1)+a6-ZZ(y) ^ 2)/p) % p)/(2*t)
     # 3M+1A+1M+1A+(1A+1M)+2M+M+M+M+M=10M+3A
     # if aseert work then pls change X1.
-    assert omega != 0
+    omega != 0
     Y1 = y+p*p2Z(omega)
     # 1A+1M
     ################################
@@ -38,7 +38,8 @@ def lift_up(point, tE, p):
     # EM*log(p-1)
     # EM = 2(2M+1A)+1M+1M+1M+(1A+1A)+2(2M+1A)+1M+(2M+1A)+1A+1M= 14M+7A
     # check if lambda_E is not zero
-    assert X1 != Xp_1
+    if X1 == Xp_1:
+        return 0
     lambda_E = ((ZZ(Xp_1)-ZZ(X1))/p % p)/((ZZ(Yp_1)-ZZ(Y1)) % p)
     # (1A+1M+1M)+1M+(1A+1M)=2A+4M
     pZ = Zmod(p)
@@ -48,8 +49,15 @@ def lift_up(point, tE, p):
 
 
 if __name__ == "__main__":
+
     lambda_P = lift_up(tP, tE, p)
     lambda_Q = lift_up(tQ, tE, p)
+    if lambda_P == 0 or lambda_Q == 0:
+        x1, y1 = tP.xy()
+        tE = EllipticCurve(GF(p), [A+p, B-p*x1])
+        lambda_P = lift_up(tP, tE, p)
+        lambda_Q = lift_up(tQ, tE, p)
+
     c = lambda_Q/lambda_P
     # EM*logc
     if tQ == ZZ(c)*tP:
